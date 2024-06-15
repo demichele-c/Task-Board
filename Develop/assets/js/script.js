@@ -8,7 +8,19 @@ var modal = document.getElementById("myModal");
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
-
+    // run some validation 
+    if(nextId == null) {
+        nextId = 1
+    } else {
+        nextId = nextId + 1
+        //nextId++;
+    };
+    console.log('Next Id: ', nextId);
+    console.log('Type: ', typeof nextId);
+    // we got this value from localStorage --> we should updated it 
+    localStorage.setItem('nextId', nextId);
+    // we return the created data
+    return nextId;
 }
 
 // Todo: create a function to create a task card
@@ -31,11 +43,19 @@ function handleAddTask(event) {
     const dueDate = document.getElementById('dueDate').value;
     
     // You can add further validation or processing of the input values here
+    let newTask = {
+        id: generateTaskId(),
+        name: taskName,
+        description: taskDescription,
+        dueDate: dueDate
+    }
+
+    console.log("Task: ", newTask)
     
     // For demonstration purposes, let's log the input values to the console
-    console.log("Task Name: " + taskName);
-    console.log("Task Description: " + taskDescription);
-    console.log("Due Date: " + dueDate);
+    //console.log("Task Name: " + taskName);
+    //console.log("Task Description: " + taskDescription);
+    //console.log("Due Date: " + dueDate);
     
     // You can add code here to save the task data to localStorage or perform any other actions
     
