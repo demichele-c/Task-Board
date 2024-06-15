@@ -58,12 +58,36 @@ function handleAddTask(event) {
     //console.log("Due Date: " + dueDate);
     
     // You can add code here to save the task data to localStorage or perform any other actions
+    // check if we HAVE data --> if not Intialze an empty dataset
+    if(taskList == null) {
+        taskList = []
+    } 
+    console.log("Saved Data: ", taskList)
+    taskList.push(newTask)
+    console.log("New Data: ", taskList)
+    console.log("type: ", typeof taskList)
+    // WE have the NEW data programatically BUT will NEED to save it to Local Storage
+    localStorage.setItem("tasks", JSON.stringify(taskList))
+
+    /*
+    let jsObj = {
+        name: "bob"
+    }
+
+    let jsonObj = {
+        "name": "bob"
+    }
+        */
     
     // Close the modal after adding the task
     //var modal = document.getElementById("myModal");
     // modal.style.display = "none";
+    
+    // RESET the FORM INPUTS
+    $('#taskName').val('')
+    $('#taskDescription').val('')
+    $('#dueDate').val('')
     $('#myModal').modal('hide')
-
 }
     
 // Event listener for the "Add Task" button
