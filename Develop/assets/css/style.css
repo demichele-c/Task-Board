@@ -3,25 +3,35 @@ body {
   font-size: 16px;
 }
 
-.swim-lanes {
-  min-height: 60vh;
-}
-
-.task-card {
-  margin: 0 auto;
-}
-
 .task-card:hover {
   cursor: grab;
 }
-/* The Modal (background) */
+/* styling for task cards. */
+#task-card-div {
+  padding: 20px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  position: relative; 
+  z-index: 2; 
+  overflow: hidden; 
+  max-width: 100%; 
+}
+/* styling for swim lanes. */
+.lane {
+  position: relative; 
+  overflow: hidden; 
+}
+#task-card-div:hover {
+  z-index: 3; /* Increase z-index on hover to bring the card to the very top */
+}
+#expired {
+  background-color: #FFC0CB; /* Light Pink */
+}
+#upcoming {
+  background-color: #ADD8E6; /* Light Blue */
+}
 
-
-
-/* Modal Content/Box */
-
-
-/* Close Button */
 .close {
   color: #aaa;
   float: right;
@@ -34,4 +44,114 @@ body {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+/* red color for to do tasks. */
+.to-do {
+  background-color: #ffcccc; 
+}
+/* blue color for in progress tasks. */
+.in-progress {
+  background-color: #cceeff; 
+}
+/* green color for done tasks. */
+.done {
+  background-color: #ccffcc; 
+}
+
+/* styling for task card. */
+.task-card h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.task-card p {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.task-card button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.task-card button:hover {
+  background-color: #c82333;
+}
+/* styling for swim lane. */
+.lane {
+  display: flex; 
+  flex-direction: column; 
+  align-items: stretch; 
+  height: auto; 
+  position: relative; 
+  z-index: 1; 
+}
+/* styling for modal. */
+.modal-dialog {
+  background-color: #fff;
+  margin: 20% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 5px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.close {
+  color: #000;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-body {
+  margin-bottom: 20px;
+}
+
+.modal-body label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.modal-body input,
+.modal-body textarea {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.modal-body input[type="date"] {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.modal-body input[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.modal-body input[type="submit"]:hover {
+  background-color: #0056b3;
 }

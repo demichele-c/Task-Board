@@ -1,118 +1,152 @@
 // Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("tasks"));
-let nextId = JSON.parse(localStorage.getItem("nextId"));
-//var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-var modal = document.getElementById("myModal");
-// Show the modal
-// myModal.show();
+let taskList = JSON.parse(localStorage.getItem("tasks")) || [];
+let nextId = JSON.parse(localStorage.getItem("nextId")) || 1;
 
-// Todo: create a function to generate a unique task id
+// Function to generate a unique task id
 function generateTaskId() {
-    // run some validation 
-    if(nextId == null) {
-        nextId = 1
+    if (nextId === null || isNaN(nextId)) {
+        nextId = 1;
     } else {
-        nextId = nextId + 1
-        //nextId++;
-    };
-    console.log('Next Id: ', nextId);
-    console.log('Type: ', typeof nextId);
-    // we got this value from localStorage --> we should updated it 
+        nextId++;
+    }
+
     localStorage.setItem('nextId', nextId);
-    // we return the created data
+
     return nextId;
 }
-
-// Todo: create a function to create a task card
+// function to create task card.
 function createTaskCard(task) {
+    const taskCard = $('<div>').attr('id', 'task-card-div').addClass('task-card');
 
+  
+    taskCard.data('taskId', task.id);
+
+    const taskNameElement = $('<h3>').text(`Project Name: ${task.name}`);
+    const taskDescriptionElement = $('<p>').text(`Description: ${task.description}`);
+    const dueDateElement = $('<p>').text(`Due Date: ${task.dueDate}`);
+    const deleteButton = $('<button>').text('Delete').addClass('delete-task-btn');
+
+    taskCard.append(taskNameElement, taskDescriptionElement, dueDateElement, deleteButton);
+
+//  function to delete task task card.
+    deleteButton.on('click', function() {
+        const taskId = task.id;
+        taskList = taskList.filter(t => t.id !== taskId);
+        localStorage.setItem('tasks', JSON.stringify(taskList));
+        taskCard.remove();
+    });
+
+// Make the task card draggable within the swim lanes.
+    taskCard.draggable({
+        revert: "invalid",
+        cursor: "move",
+        containment: ".swim-lanes",
+    });
+
+    return taskCard;
 }
-
-// Todo: create a function to render the task list and make cards draggable
+// function to render task list and make task cards adjust to current lane.
 function renderTaskList() {
+    function handleDrop(event, ui) {
+        const droppedTask = ui.draggable;
+        const newStatusLane = $(this);
+    
+        // Check if the new status lane is a valid swim lane
+        if (newStatusLane.hasClass('lane')) {
+            // Update the task's status based on the new status lane
+            const taskId = droppedTask.data('taskId');
+            const newStatus = newStatusLane.attr('id');
+    
+            taskList.forEach(task => {
+                if (task.id === taskId) {
+                    // Remove previous swim lane class
+                    droppedTask.removeClass(task.status);
+                    // Update the task's status and add the new swim lane class
+                    task.status = newStatus;
+                    droppedTask.addClass(newStatus);
+                }
+            });
+    
+            localStorage.setItem('tasks', JSON.stringify(taskList));
+    
+            // Move the dropped task to the new status lane
+            droppedTask.appendTo(newStatusLane);
+        }
+    }
+    
+    // Update the droppable event binding to handle the drop event
+    $('.lane').droppable({
+        accept: '.task-card',
+        drop: handleDrop
+    });
+    
 
+    const todoCards = $('#todo-cards');
+    const inProgressCards = $('#in-progress-cards');
+    const doneCards = $('#done-cards');
+
+    todoCards.empty();
+    inProgressCards.empty();
+    doneCards.empty();
+
+    taskList.forEach(task => {
+        const taskCard = createTaskCard(task);
+
+    
+        taskCard.addClass(task.status);
+
+        if (task.status === 'to-do') {
+            todoCards.append(taskCard);
+        } else if (task.status === 'in-progress') {
+            inProgressCards.append(taskCard);
+        } else if (task.status === 'done') {
+            doneCards.append(taskCard);
+        }
+    });
 }
 
-// Todo: create a function to handle adding a new task
-function handleAddTask(event) {
-    event.preventDefault(); // Prevent the default form submission behavior
 
-    // Get the form input values
-    const taskName = document.getElementById('taskName').value;
-    const taskDescription = document.getElementById('taskDescription').value;
-    const dueDate = document.getElementById('dueDate').value;
-    
-    // You can add further validation or processing of the input values here
+// Call renderTaskList to initially render the task list
+renderTaskList();
+
+// Event listener for adding a new task using jQuery.
+$('#formSubmit').on('click', function(event) {
+    event.preventDefault();
+
+    const taskName = $('#taskName').val();
+    const taskDescription = $('#taskDescription').val();
+    const dueDate = $('#dueDate').val();
+
     let newTask = {
         id: generateTaskId(),
         name: taskName,
         description: taskDescription,
-        dueDate: dueDate
-    }
+        dueDate: dueDate,
+        status: 'to-do'
+    };
 
-    console.log("Task: ", newTask)
-    
-    // For demonstration purposes, let's log the input values to the console
-    //console.log("Task Name: " + taskName);
-    //console.log("Task Description: " + taskDescription);
-    //console.log("Due Date: " + dueDate);
-    
-    // You can add code here to save the task data to localStorage or perform any other actions
-    // check if we HAVE data --> if not Intialze an empty dataset
-    if(taskList == null) {
-        taskList = []
-    } 
-    console.log("Saved Data: ", taskList)
-    taskList.push(newTask)
-    console.log("New Data: ", taskList)
-    console.log("type: ", typeof taskList)
-    // WE have the NEW data programatically BUT will NEED to save it to Local Storage
-    localStorage.setItem("tasks", JSON.stringify(taskList))
+    taskList.push(newTask);
+    localStorage.setItem('tasks', JSON.stringify(taskList));
 
-    /*
-    let jsObj = {
-        name: "bob"
-    }
+    renderTaskList();
 
-    let jsonObj = {
-        "name": "bob"
-    }
-        */
-    
-    // Close the modal after adding the task
-    //var modal = document.getElementById("myModal");
-    // modal.style.display = "none";
-    
-    // RESET the FORM INPUTS
-    $('#taskName').val('')
-    $('#taskDescription').val('')
-    $('#dueDate').val('')
-    $('#myModal').modal('hide')
-}
-    
-// Event listener for the "Add Task" button
-const addTaskButton = document.querySelector('#formSubmit');
-addTaskButton.addEventListener('click', handleAddTask);
-    
-const closeBtn = document.querySelector('.close')
-    
-closeBtn.addEventListener('click', function() {
-    //myModal.modal('hide')
-   $('#myModal').modal('hide')
+    $('#taskName, #taskDescription, #dueDate').val('');
+    $('#myModal').modal('hide');
 });
 
+// Event listener for closing the modal using jQuery
+$('.close').on('click', function() {
+    $('#myModal').modal('hide');
+});
 
-// Todo: create a function to handle deleting a task
-function handleDeleteTask(event){
-
-}
-
-// Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) {
-
-}
-
-// Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
+// When the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
-
-});
+    // Render Task List
+    function renderTasks() {
+        // Retrieve tasks from localStorage and render on the task board
+    }
+    // Function to format the due date using Day.js
+function formatDueDate(dueDate) {
+    return dayjs(dueDate).format('MMM DD, YYYY');
+}
+})
