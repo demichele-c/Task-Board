@@ -45,7 +45,7 @@ function createTaskCard(task) {
 
     return taskCard;
 }
-// function to render task list and make task cards adjust status based on current lane.
+
 function renderTaskList() {
     function handleDrop(event, ui) {
         const droppedTask = ui.draggable;
@@ -104,7 +104,10 @@ function renderTaskList() {
         }
     });
 }
-
+// Function to format the due date using Day.js
+function formatDueDate(dueDate) {
+    return dayjs(dueDate).format('MMM DD, YYYY');
+}
 
 // Call renderTaskList to initially render the task list
 renderTaskList();
@@ -139,15 +142,10 @@ $('.close').on('click', function() {
     $('#myModal').modal('hide');
 });
 
-// When the page loads, render the task list and make the due date field a date picker
+// When the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
     // Render Task List
     function renderTasks() {
         // Retrieve tasks from localStorage and render on the task board
     }
-    // Function to format the due date using Day.js
-function formatDueDate(dueDate) {
-    return dayjs(dueDate).format('MMM DD, YYYY');
-}
 })
-
