@@ -18,7 +18,7 @@ THEN I added a function to , render the task list,  and make the due date field 
 ```
 ## Deployed Website Screenshot
 
-![Deployed Website](Assets/Kanban-Board.png)
+![Deployed Website](Screenshot/Kanban-Board.png)
 
 
 ## Project URL
