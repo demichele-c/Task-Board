@@ -37,12 +37,19 @@ function createTaskCard(task) {
     });
 
 // Make the task card draggable within the swim lanes.
-    taskCard.draggable({
-        revert: "invalid",
-        cursor: "move",
-        containment: ".swim-lanes",
-    });
-
+taskCard.draggable({
+    revert: "invalid",
+    cursor: "move",
+    containment: ".swim-lanes",
+    helper: function (e) {
+      const original = $(e.target).hasClass("ui-draggable")
+        ? $(e.target)
+        : $(e.target).closest(".ui-draggable");
+      return original.clone().css({
+        maxWidth: original.outerWidth(),
+      });
+    },
+  });
     return taskCard;
 }
 

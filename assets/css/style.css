@@ -12,7 +12,7 @@ body {
   margin: 10px;
   border: 1px solid #ccc;
   border-radius: 5px; 
-  z-index: 2; 
+  
   overflow: hidden; 
   max-width: 100%; 
   position: static;
@@ -22,15 +22,8 @@ body {
   position: relative; 
   overflow: hidden; 
 }
-#task-card-div:hover {
-  z-index: 3; /* Increase z-index on hover to bring the card to the very top */
-}
-#expired {
-  background-color: #FFC0CB; /* Light Pink */
-}
-#upcoming {
-  background-color: #ADD8E6; /* Light Blue */
-}
+
+
 
 .close {
   color: #aaa;
@@ -89,7 +82,7 @@ body {
   align-items: stretch; 
   height: auto; 
   position: static; 
-  z-index: 1; 
+
 }
 /* styling for modal. */
 .modal-dialog {
@@ -157,5 +150,5 @@ body {
 }
 .container {
   position: relative;
-  z-index: 0;
+
 }
